@@ -519,6 +519,17 @@ WebIOPi.prototype.createAngleSlider = function(gpio) {
 	return slider;
 }
 
+WebIOPi.prototype.createSlider = function (id, callback, min=-45, max=45, step=1, deg=0) {
+	var slider = $('<input type="range" class="Default">');
+	slider.attr("id", id);
+	slider.attr("min", min);
+	slider.attr("max", max);
+	slider.attr("step", step);
+	slider.attr("deg", deg);
+	slider.bind("change", callback(slider.val()));
+	return slider;
+}
+
 WebIOPi.prototype.RPiHeader = function () {
 	if (w()._header == undefined) {
 		w()._header = new RPiHeader();
