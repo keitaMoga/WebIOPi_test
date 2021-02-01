@@ -521,14 +521,15 @@ WebIOPi.prototype.createAngleSlider = function(gpio) {
 
 WebIOPi.prototype.createSlider = function (id, callback, min=-45, max=45, step=1, deg=0) {
 	var slider = $('<input type="range" class="Default">');
-	var slider_val = document.getElementById(id).value;
 	let degree = 'transform: rotate(' + deg + 'deg);';
 	slider.attr("id", id);
 	slider.attr("min", min);
 	slider.attr("max", max);
 	slider.attr("step", step);
 	slider.attr("style", degree);
-	slider.bind("onchange", callback(slider_val));
+	slider.bind("change", function() {
+		callback(slider.val());
+	});
 	return slider;
 }
 
