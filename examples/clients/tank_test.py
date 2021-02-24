@@ -1,56 +1,107 @@
 import webiopi
 import time
-import wiringpi as GPIO
+import Adafruit_PCA9685
 
-SERVO_PAN = 26
+PWM_FREQUENCY=60
 
-# SERVO_PAN  (Left)90 ... 0 ... -90(Right)
-SERVO_PAN_TRIM = 12 # degree
- 
-SERVO_PAN_LEFT_LIMIT = 60 # degree
-SERVO_PAN_RIGHT_LIMIT = -60 # degree
- 
-##### SERVO SPECIFICATION #####
-SERVO_ANGLE_MIN = -90 # degree
-SERVO_ANGLE_MAX =  90 # degree
-SERVO_PULSE_MIN = 0.75 # ms
-SERVO_PULSE_MAX = 2.4 # ms
-SERVO_CYCLE = 50 # ms
-###############################
- 
-#### WIRINGPI SPECIFICATION ####
-PWM_WRITE_MIN = 0
-PWM_WRITE_MAX = 1024
-################################
- 
-SERVO_DUTY_MIN = SERVO_PULSE_MIN/SERVO_CYCLE
-SERVO_DUTY_MAX = SERVO_PULSE_MAX/SERVO_CYCLE
- 
-SERVO_PAN_DUTY_MIN = (SERVO_DUTY_MAX - SERVO_DUTY_MIN) / (SERVO_ANGLE_MAX - SERVO_ANGLE_MIN) * ((SERVO_PAN_LEFT_LIMIT +SERVO_PAN_TRIM) - SERVO_ANGLE_MIN) + SERVO_DUTY_MIN
-SERVO_PAN_DUTY_MAX = (SERVO_DUTY_MAX - SERVO_DUTY_MIN) / (SERVO_ANGLE_MAX - SERVO_ANGLE_MIN) * ((SERVO_PAN_RIGHT_LIMIT+SERVO_PAN_TRIM) - SERVO_ANGLE_MIN) + SERVO_DUTY_MIN
+R_MOTER_FWD_CH = 7
+R_MOTER_BCK_CH = 6
+L_MOTER_FWD_CH = 8
+L_MOTER_BCK_CH = 9
+R_SERVO_CH = 4
+L_SERVO_CH = 11
 
-SERVO_PAN_PWM_WRITE_MIN = PWM_WRITE_MAX * SERVO_PAN_DUTY_MIN
-SERVO_PAN_PWM_WRITE_MAX = PWM_WRITE_MAX * SERVO_PAN_DUTY_MAX
+MIN_SERVO_PULSE_WIDH=150
+MAX_SERVO_PULSE_WIDH=450
 
-def getServoPanPWMvalue(val):
-    # This function returns 0 ... 1024
-    pwm_value = int((SERVO_PAN_PWM_WRITE_MAX - SERVO_PAN_PWM_WRITE_MIN) * val + SERVO_PAN_PWM_WRITE_MIN)
-    return pwm_value
- 
-webiopi.setDebug()
+MAX_PULSE_WIDTH=1250
 
-def setup():
-    webiopi.debug("Script with macros - Setup")
-    GPIO.wiringPiSetupGpio()
-    GPIO.pinMode(SERVO_PAN,GPIO.OUTPUT)
-    GPIO.softPwmCreate(SERVO_PAN,0,50)
+pwm = Adafruit_PCA9685.PCA9685()
+pwm.set_pwm_freq(PWM_FREQUENCY)
+
+r_servo_val=MIN_SERVO_PULSE_WIDH
+l_servo_val=MIN_SERVO_PULSE_WIDH
+r_servo_state=0
+l_servo_state=0
 
 def loop():
-    webiopi.sleep(5)
+    global r_servo_state
+    global l_servo_state
 
-def destroy():
-    webiopi.debug("Script with macros - Destroy")
+    webiopi.sleep(0.1)
+
+    if r_servo_state != 0:
+        global r_servo_val
+        r_servo_val = r_servo_val + r_servo_state
+        if r_servo_val < MIN_SERVO_PULSE_WIDH or r_servo_val > MAX_SERVO_PULSE_WIDH:
+            r_servo_val = r_servo_val - r_servo_state
+        else:
+            pwm.set_pwm(R_SERVO_CH, 0, r_servo_val)
+
+    if l_servo_state != 0:
+        global l_servo_val
+        l_servo_val = l_servo_val + l_servo_state
+        if l_servo_val < MIN_SERVO_PULSE_WIDH or l_servo_val > MAX_SERVO_PULSE_WIDH:
+            l_servo_val = l_servo_val - l_servo_state
+        else:
+            pwm.set_pwm(L_SERVO_CH, 0, l_servo_val)
 
 @webiopi.macro
-def setHwPWMforPan(duty):
-    #GPIO.softPwmWrite(SERVO_PAN, getServoPanPWMvalue(float(duty)))
+def right_moter(param1):
+    pwm.set_pwm(R_MOTER_FWD_CH, 0, param1 * 100)
+
+@webiopi.macro
+def right_moter_forward():
+    pwm.set_pwm(R_MOTER_FWD_CH, 0, MAX_PULSE_WIDTH)
+
+@webiopi.macro
+def right_moter_back():
+    pwm.set_pwm(R_MOTER_BCK_CH, 0, MAX_PULSE_WIDTH)
+
+@webiopi.macro
+def right_moter_stop():
+    pwm.set_pwm(R_MOTER_FWD_CH, 0, 0)
+    pwm.set_pwm(R_MOTER_BCK_CH, 0, 0)
+
+@webiopi.macro
+def left_moter_forward():
+    pwm.set_pwm(L_MOTER_FWD_CH, 0, MAX_PULSE_WIDTH)
+
+@webiopi.macro
+def left_moter_back():
+    pwm.set_pwm(L_MOTER_BCK_CH, 0, MAX_PULSE_WIDTH)
+
+@webiopi.macro
+def left_moter_stop():
+    pwm.set_pwm(L_MOTER_FWD_CH, 0, 0)
+    pwm.set_pwm(L_MOTER_BCK_CH, 0, 0)
+
+@webiopi.macro
+def right_servo_forward():
+    global r_servo_state
+    r_servo_state = -10
+
+@webiopi.macro
+def right_servo_back():
+    global r_servo_state
+    r_servo_state = 10
+
+@webiopi.macro
+def right_servo_stop():
+    global r_servo_state
+    r_servo_state = 0
+
+@webiopi.macro
+def left_servo_forward():
+    global l_servo_state
+    l_servo_state = -10
+
+@webiopi.macro
+def left_servo_back():
+    global l_servo_state
+    l_servo_state = 10
+
+@webiopi.macro
+def left_servo_stop():
+    global l_servo_state
+    l_servo_state = 0
