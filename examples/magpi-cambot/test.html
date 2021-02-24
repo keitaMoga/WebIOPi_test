@@ -11,14 +11,14 @@
 	</div>
 	<div style="display: grid;">
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex;">
-			<button type="button" name="aaa" value="aaa" style="height: 30%; width: 100%;">
+			<button type="button" style="height: 30%; width: 100%;" onclick="button_left_stop()">
 				<font size="2"
 					style="text-align: center; vertical-align: middle; writing-mode: vertical-rl; text-orientation: upright;">
 					Stop</font>
 			</button>
 		</div>
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex;">
-			<button type="button" name="aaa" value="aaa" style="height: 30%; width: 100%;">
+			<button type="button" style="height: 30%; width: 100%;" onclick="button_left_auto()">
 				<font size="2"
 					style="text-align: center; vertical-align: middle; writing-mode: vertical-rl; text-orientation: upright;">
 					Auto</font>
@@ -28,7 +28,7 @@
 	<div style="display: grid;">
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex;">CameraView</div>
 		<div style="text-align: bottom; justify-content: center; align-items: flex-end;display: flex;padding: 10%;">
-			<button type="button" name="aaa" value="aaa" style="height: 20%; width: 20%;">
+			<button type="button" style="height: 20%; width: 20%;" onclick="button_camera()">
 				<font size="2" style="text-align: center; vertical-align: middle;">
 					Camera Start</font>
 			</button>
@@ -36,14 +36,14 @@
 	</div>
 	<div style="display: grid;">
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex;">
-			<button type="button" name="aaa" value="aaa" style="height: 30%; width: 100%;">
+			<button type="button" style="height: 30%; width: 100%;" onclick="button_right_stop()">
 				<font size="2"
 					style="text-align: center; vertical-align: middle; writing-mode: vertical-rl; text-orientation: upright;">
 					Stop</font>
 			</button>
 		</div>
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex; ">
-			<button type="button" name="aaa" value="aaa" style="height: 30%; width: 100%;">
+			<button type="button" style="height: 30%; width: 100%;" onclick="button_right_auto()">
 				<font size="2"
 					style="text-align: center; vertical-align: middle; writing-mode: vertical-rl; text-orientation: upright;">
 					Auto</font>
@@ -52,12 +52,48 @@
 	</div>
 	<div style="display: grid;">
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_left_moter"
+			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_right_moter"
 				style="transform: rotate(-90deg);">
 		</div>
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_left_turret"
+			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_right_turret"
 				style="transform: rotate(45deg);">
 		</div>
 	</div>
 </div>
+
+<script>
+	var range_right_moter = document.getElementById("range_right_moter");
+	var range_left_moter = document.getElementById("range_left_moter");
+	var range_right_turret = document.getElementById("range_right_turret");
+	var range_left_turret = document.getElementById("range_left_turret");
+
+	range_right_moter.oninput = function () {
+		webiopi().callMacro("right_moter_control", range_right_moter.value);
+	};
+	range_left_moter.oninput = function () {
+		webiopi().callMacro("left_moter_control", range_left_moter.value);
+	};
+	range_right_turret.oninput = function () {
+		webiopi().callMacro("right_turret_control", range_right_turret.value);
+	};
+	range_left_turret.oninput = function () {
+		webiopi().callMacro("left_turret_control", range_left_turret.value);
+	};
+
+	function button_right_stop() {
+		webiopi().callMacro("button_right_stop", button_right_stop.value);
+	}
+	function button_left_stop() {
+		webiopi().callMacro("button_left_stop", button_left_stop.value);
+	}
+	function button_right_auto() {
+		webiopi().callMacro("button_right_auto", button_right_auto.value);
+	}
+	function button_left_auto() {
+		webiopi().callMacro("button_left_auto", button_left_auto.value);
+	}
+	function button_camera() {
+		webiopi().callMacro("button_camera", button_camera.value);
+	}
+</script>
