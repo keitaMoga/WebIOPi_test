@@ -1,11 +1,12 @@
-<div style="display: grid; grid-template-columns: 10fr 2fr 40fr 2fr 10fr; height: 100%;">
+<div
+	style="display: grid; grid-template-columns: 10fr 2fr 40fr 2fr 10fr; height: 100%; background-image: url(japanese-paper_00274.jpg); background-repeat: no-repeat; background-position: center center; background-size: cover; ">
 	<div style="display: grid;">
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_left_moter"
+			<input type="range" min="-1250" max="1250" value="0" class="slider" step="1" id="range_left_moter"
 				style="transform: rotate(-90deg);">
 		</div>
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_left_turret"
+			<input type="range" min="150" max="450" value="300" class="slider" step="1" id="range_left_turret"
 				style="transform: rotate(135deg);">
 		</div>
 	</div>
@@ -26,9 +27,10 @@
 		</div>
 	</div>
 	<div style="display: grid;">
-		<div style="text-align: center; justify-content: center; align-items: center;display: flex;">CameraView</div>
-		<div style="text-align: bottom; justify-content: center; align-items: flex-end;display: flex;padding: 10%;">
-			<button type="button" style="height: 20%; width: 20%;" onclick="button_camera()">
+		<div style="text-align: center; justify-content: center; align-items: center;display: flex;"><img
+				src="MarkIVTankWithUnditchingBeam1917.jpg" alt="CameraView" title="CameraView" width="80%"></div>
+		<div style="text-align: bottom; justify-content: center; align-items: flex-end;display: flex;padding: 5%;">
+			<button type="button" style="height: 50%; width: 20%;" onclick="button_camera()">
 				<font size="2" style="text-align: center; vertical-align: middle;">
 					Camera Start</font>
 			</button>
@@ -52,12 +54,12 @@
 	</div>
 	<div style="display: grid;">
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_right_moter"
+			<input type="range" min="-1250" max="1250" value="0" class="slider" step="1" id="range_right_moter"
 				style="transform: rotate(-90deg);">
 		</div>
 		<div style="display: grid; padding: 10%;">
-			<input type="range" min="-50" max="50" value="0" class="slider" step="1" id="range_right_turret"
-				style="transform: rotate(45deg);">
+			<input type="range" min="150" max="450" value="300" value="0" class="slider" step="1"
+				id="range_right_turret" style="transform: rotate(45deg);">
 		</div>
 	</div>
 </div>

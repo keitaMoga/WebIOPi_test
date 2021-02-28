@@ -24,6 +24,9 @@ l_servo_val=MIN_SERVO_PULSE_WIDH
 r_servo_state=0
 l_servo_state=0
 
+right_moter_lastvalue=0
+left_moter_lastvalue=0
+
 def loop():
     global r_servo_state
     global l_servo_state
@@ -45,6 +48,42 @@ def loop():
             l_servo_val = l_servo_val - l_servo_state
         else:
             pwm.set_pwm(L_SERVO_CH, 0, l_servo_val)
+
+@webiopi.macro
+def right_moter_control(val):
+    global right_moter_lastvalue
+
+    if right_moter_lastvalue > 0 and val < 0 or right_moter_lastvalue < 0 and val > 0 or val == 0:
+        pwm.set_pwm(R_MOTER_FWD_CH, 0, 0)
+        pwm.set_pwm(R_MOTER_BCK_CH, 0, 0)
+    if right_moter_lastvalue > 0:
+        pwm.set_pwm(R_MOTER_FWD_CH, 0, val)
+    if right_moter_lastvalue < 0:
+        pwm.set_pwm(R_MOTER_BCK_CH, 0, val)
+
+    right_moter_lastvalue = val
+
+@webiopi.macro
+def left_moter_control(val):
+    global left_moter_lastvalue
+
+    if left_moter_lastvalue > 0 and val < 0 or left_moter_lastvalue < 0 and val > 0 or val == 0:
+        pwm.set_pwm(R_MOTER_FWD_CH, 0, 0)
+        pwm.set_pwm(R_MOTER_BCK_CH, 0, 0)
+    if left_moter_lastvalue > 0:
+        pwm.set_pwm(R_MOTER_FWD_CH, 0, val)
+    if left_moter_lastvalue < 0:
+        pwm.set_pwm(R_MOTER_BCK_CH, 0, val)
+
+    left_moter_lastvalue = val
+
+@webiopi.macro
+def right_turret_control(val):
+    pwm.set_pwm(R_SERVO_CH, 0, val)
+
+@webiopi.macro
+def left_turret_control(val):
+    pwm.set_pwm(L_SERVO_CH, 0, val)
 
 @webiopi.macro
 def right_moter(param1):
