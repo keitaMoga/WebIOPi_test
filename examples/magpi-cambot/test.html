@@ -1,3 +1,16 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Controller</title>
+	<script type="text/javascript" src="/webiopi.js"></script>
+	<script type="text/javascript">
+	</script>
+
+	<style type="text/css">
+	</style>
+</head>
 <div
 	style="display: grid; grid-template-columns: 10fr 2fr 40fr 2fr 10fr; height: 100%; background-image: url(japanese-paper_00274.jpg); background-repeat: no-repeat; background-position: center center; background-size: cover; ">
 	<div style="display: grid;">
@@ -28,7 +41,7 @@
 	</div>
 	<div style="display: grid;">
 		<div style="text-align: center; justify-content: center; align-items: center;display: flex;"><img
-				src="MarkIVTankWithUnditchingBeam1917.jpg" alt="CameraView" title="CameraView" width="80%"></div>
+				src="http://192.168.10.13:8080/?action=stream" alt="CameraView" title="CameraView" width="80%"></div>
 		<div style="text-align: bottom; justify-content: center; align-items: flex-end;display: flex;padding: 5%;">
 			<button type="button" style="height: 50%; width: 20%;" onclick="button_camera()">
 				<font size="2" style="text-align: center; vertical-align: middle;">
@@ -99,3 +112,5 @@
 		webiopi().callMacro("button_camera", button_camera.value);
 	}
 </script>
+
+</html>
